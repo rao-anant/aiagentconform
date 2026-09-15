@@ -7,7 +7,7 @@ https://github.com/agentplugins/agent-plugins-spec
 They are licensed under the Apache License, Version 2.0, per:
 https://github.com/agentplugins/agent-plugins-spec/blob/main/LICENSE.md
 
-A copy is included as Apache-2.0.txt in this directory. AgentCheck's MIT license
+A copy is included as Apache-2.0.txt in this directory. AIAgentConform's MIT license
 does not replace the upstream schema license. Specification/documentation
 material is separately CC BY 4.0, attributed to Agent Plugins documentation
 contributors, 2026. This project links to that prose and implements static

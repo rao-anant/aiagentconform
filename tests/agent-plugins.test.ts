@@ -10,7 +10,7 @@ import { expandPlaceholders } from '../src/protocols/agent-plugins/paths.js';
 const fixture = (name: string) => path.resolve('fixtures/agent-plugins', name);
 const temporary: string[] = [];
 function copy(name = 'minimal'): string {
-  const root = mkdtempSync(path.join(tmpdir(), 'agentcheck-'));
+  const root = mkdtempSync(path.join(tmpdir(), 'aiconform-'));
   temporary.push(root);
   cpSync(fixture(name), root, { recursive: true });
   return root;

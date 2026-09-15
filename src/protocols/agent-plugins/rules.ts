@@ -3,7 +3,7 @@ import type { Rule } from '../../core/report.js';
 const spec = 'https://agent-plugins.org/specification';
 const definitions = [
   ['AP001', 'Manifest discovery', 'Find a regular plugin.json at the supplied directory root.', '5.1', '51-location-and-loading'],
-  ['AP002', 'Package containment', 'Filesystem-resolved paths inspected by AgentCheck stay inside the plugin root.', '4.1', '41-general-requirements'],
+  ['AP002', 'Package containment', 'Filesystem-resolved paths inspected by AIAgentConform stay inside the plugin root.', '4.1', '41-general-requirements'],
   ['AP003', 'Manifest JSON', 'Parse plugin.json as a JSON object.', '5.2', '52-manifest-object'],
   ['AP004', 'Required manifest fields', 'Require non-empty string $schema and name fields.', '5.3', '53-required-fields'],
   ['AP005', 'Manifest schema version', 'Recognize the exact canonical 1.0.0 manifest schema identifier locally.', '5.2', '52-manifest-object'],

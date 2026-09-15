@@ -1,6 +1,6 @@
-# Contributing to AgentCheck
+# Contributing to AIAgentConform
 
-AgentCheck turns cited protocol requirements into deterministic, inspectable
+AIAgentConform turns cited protocol requirements into deterministic, inspectable
 checks. Contributions should reduce uncertainty without inventing requirements.
 The current module is Agent Plugins 1.0.0; new protocols and runtime execution
 are outside the v0.1 scope.

@@ -1,7 +1,7 @@
 {
-  "name": "agentcheck",
+  "name": "aiagentconform",
   "version": "0.1.0",
-  "description": "Static Agent Plugins 1.0 conformance checks for plugin authors and CI",
+  "description": "Open-source conformance testing for AI agent protocols and standards.",
   "license": "MIT",
   "author": "Anant Rao",
   "repository": {
@@ -14,7 +14,7 @@
   },
   "type": "module",
   "bin": {
-    "agentcheck": "dist/cli.js"
+    "aiconform": "dist/cli.js"
   },
   "files": [
     "dist",
@@ -54,12 +54,13 @@
     "vitest": "^5.0.0"
   },
   "keywords": [
-    "agentcheck",
+    "aiagentconform",
     "agent-plugins",
     "ai-agents",
     "conformance",
     "validation",
-    "cli"
+    "cli",
+    "aiconform"
   ],
   "exports": {
     "./report.schema.json": "./schemas/report.schema.json"

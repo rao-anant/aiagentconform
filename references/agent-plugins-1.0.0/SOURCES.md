@@ -22,13 +22,13 @@ Agent Plugins documentation contributors, 2026, CC BY 4.0.
 
 ## Scope decisions and ambiguities
 
-AgentCheck checks static package inputs; it is not a conformant executing client.
+AIAgentConform checks static package inputs; it is not a conformant executing client.
 Findings distinguish package failure from the loader's failure boundary.
 Unknown manifest fields and a non-object extensions field fail package checks
 but do not block independently valid components (§5.2, §8.1).
 
 Unimplemented extension values are opaque (§8.1), even though the JSON Schema
-describes object values. AgentCheck implements no extension namespaces, so it
+describes object values. AIAgentConform implements no extension namespaces, so it
 does not inspect those values. Reverse-domain namespace syntax has no normative
 grammar; namespace spelling and client-file classification are deferred.
 

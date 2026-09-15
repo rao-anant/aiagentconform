@@ -1,20 +1,20 @@
-# AgentCheck
+# AIAgentConform
 
-**Catch Agent Plugins packaging errors before they reach an agent or CI.**
+**Open-source conformance testing for AI agent protocols and standards.**
 
-AgentCheck is an open-source command-line conformance checker for AI-agent
+AIAgentConform is an open-source command-line conformance checker for AI-agent
 protocols. Its first module checks **Agent Plugins 1.0.0**: manifests, skills,
 MCP configuration, paths, and portable transport settings. Each failure names a
 stable rule and links to the official requirement, so authors can fix the
 package and CI can explain why it failed.
 
 Agent ecosystems are adopting shared formats, but a JSON file that parses is
-not necessarily portable. AgentCheck combines the official JSON Schemas with
+not necessarily portable. AIAgentConform combines the official JSON Schemas with
 static checks for requirements that schemas alone cannot express. It does not
 execute plugins or contact their configured servers.
 
 ```text
-AgentCheck - Agent Plugins 1.0
+AIAgentConform - Agent Plugins 1.0
 ✓ 20/20 conformance checks passed
 ```
 
@@ -38,39 +38,44 @@ package, or try it through npx:
 
 ```sh
 npm pack --pack-destination .
-npm install --global ./agentcheck-0.1.0.tgz
-agentcheck ./my-plugin
+npm install --global ./aiagentconform-0.1.0.tgz
+aiconform ./my-plugin
 
 # Alternative: use the local tarball without a global installation.
-npx --yes --package=./agentcheck-0.1.0.tgz agentcheck ./my-plugin
+npx --yes --package=./aiagentconform-0.1.0.tgz aiconform ./my-plugin
 ```
 
-For development, `npm link` after building also exposes `agentcheck`.
+The npm package is `aiagentconform`; its executable is `aiconform`. After a local
+installation, `npx aiconform --help` resolves that executable. Outside a project
+with it installed, use the explicit `--package` form above to avoid looking up
+a different npm package named `aiconform`.
+
+For development, `npm link` after building also exposes `aiconform`.
 `npm run verify` produces and tests a release tarball under `.artifacts/`.
 
 After a maintainer publishes this project under its intended npm name, the
-planned registry commands are `npm install --global agentcheck@0.1.0` and
-`npx --yes agentcheck@0.1.0 ./my-plugin`. **Those are not installation instructions
+planned registry commands are `npm install --global aiagentconform@0.1.0` and
+`npx --yes --package=aiagentconform@0.1.0 aiconform ./my-plugin`. **Those are not installation instructions
 for the current unpublished checkout.** Always verify the package owner before
 using a newly published registry package.
 
 ## Examples
 
 ```sh
-agentcheck ./my-plugin
-agentcheck ./my-plugin --format terminal
-agentcheck ./my-plugin --format json > agentcheck-report.json
-agentcheck ./my-plugin --rule AP006
-agentcheck --list-rules
-agentcheck --list-rules --format json
-agentcheck --help
-agentcheck --version
+aiconform ./my-plugin
+aiconform ./my-plugin --format terminal
+aiconform ./my-plugin --format json > aiconform-report.json
+aiconform ./my-plugin --rule AP006
+aiconform --list-rules
+aiconform --list-rules --format json
+aiconform --help
+aiconform --version
 ```
 
 A failure includes the rule, file/location, problem, and specification link:
 
 ```text
-AgentCheck - Agent Plugins 1.0
+AIAgentConform - Agent Plugins 1.0
 ✗ FAIL AP006  plugin.json#/name
   Name must satisfy the official 1–64 character lowercase name constraints.
   Spec: §5.5 https://agent-plugins.org/specification#55-plugin-name-constraints
@@ -111,13 +116,13 @@ To use the local release candidate in a plugin repository, copy the reviewed
 tarball into a directory such as `tools/`, then install it as a devDependency:
 
 ```sh
-npm install --save-dev ./tools/agentcheck-0.1.0.tgz
-npx --no-install agentcheck ./plugin
+npm install --save-dev ./tools/aiagentconform-0.1.0.tgz
+npx --no-install aiconform ./plugin
 ```
 
 Commit the tarball, `package.json`, and `package-lock.json` in that repository.
-Copy [examples/agentcheck.yml](examples/agentcheck.yml) to
-`.github/workflows/agentcheck.yml` and adjust `./plugin`. Its check step propagates
+Copy [examples/aiconform.yml](examples/aiconform.yml) to
+`.github/workflows/aiconform.yml` and adjust `./plugin`. Its check step propagates
 both failure and incomplete exit codes to GitHub Actions; it does not hide errors
 with `continue-on-error`. After publication, a pinned registry devDependency can
 replace the tarball without changing the check command.
@@ -165,7 +170,7 @@ replace the tarball without changing the check command.
   Skills are discovered only in immediate child directories with a regular,
   exact-case `SKILL.md`. No recursive discovery or missing-skill error is invented.
 - Agent Skills naming prose mixes Unicode terminology with ASCII examples.
-  AgentCheck accepts Unicode lowercase letters/numbers. Unknown frontmatter keys
+  AIAgentConform accepts Unicode lowercase letters/numbers. Unknown frontmatter keys
   and an empty Markdown body are not rejected. Bare executable names containing
   whitespace remain a documented portability ambiguity.
 - Filesystem behavior is host-dependent. Local verification has been performed on
@@ -201,5 +206,5 @@ for the full direction.
 
 Created by Anant Rao. Contributions welcome.
 
-AgentCheck code is [MIT licensed](LICENSE). Official schemas retain their
+AIAgentConform code is [MIT licensed](LICENSE). Official schemas retain their
 [Apache-2.0 license and attribution](references/agent-plugins-1.0.0/NOTICE.md).

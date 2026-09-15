@@ -9,9 +9,9 @@ Before a maintainer makes a public release:
   is https://github.com/rao-anant/agentcheck; `repository`, `homepage`, and `bugs`
   metadata are configured. GitHub authentication and the initial push remain
   to be completed.
-- Confirm npm account ownership and the final package name/scope. A read-only
-  registry lookup for `agentcheck` returned 404 on 2026-09-10 local time; that
-  does not reserve the name or establish publish permission.
+- Confirm npm account ownership and availability of the new package name
+  `aiagentconform`. Previous registry checks for the old name do not establish
+  availability or publishing rights for the new name.
 - Run the committed GitHub matrix in the eventual public repository. Local
   verification cannot establish hosted Linux/macOS results or Windows support.
 - Review the documented static coverage, especially extension/command ambiguities
@@ -30,3 +30,8 @@ it does not itself publish. No publish or push command is part of verification.
 `npm run verify` leaves a reviewed local tarball in `.artifacts/`. That tarball
 can be installed and used by CI today without a registry release. Review its
 contents and checksums before distribution.
+
+The GitHub repository URL still uses its existing name, `rao-anant/agentcheck`.
+That remote repository has not been renamed; retaining its real URL keeps
+repository, homepage, and issue links correct. The local checkout directory and
+Git history may also retain the old name.

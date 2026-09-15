@@ -11,14 +11,14 @@ export function createCommand(
   setExitCode: (code: number) => void = (code) => { process.exitCode = code; },
 ): Command {
   const command = new Command()
-    .name('agentcheck')
-    .description('Static Agent Plugins 1.0 conformance checks; never executes plugin code')
+    .name('aiconform')
+    .description('Open-source conformance testing for AI agent protocols and standards.')
     .version(version)
     .argument('[plugin-directory]', 'plugin package directory (required unless listing rules)')
     .addOption(new Option('-f, --format <format>', 'output format').choices(['terminal', 'json']).default('terminal'))
     .option('--list-rules', 'list conformance rules and specification references')
     .addOption(new Option('--rule <APxxx>', 'run one rule with necessary prerequisite checks').choices(rules.map(rule => rule.id)))
-    .addHelpText('after', '\nExamples:\n  agentcheck ./my-plugin\n  agentcheck ./my-plugin --format json\n  agentcheck ./my-plugin --rule AP006\n  agentcheck --list-rules\n\nExit codes: 0 = passed/list/help, 1 = conformance failure, 2 = usage error or incomplete check.');
+    .addHelpText('after', '\nExamples:\n  aiconform ./my-plugin\n  aiconform ./my-plugin --format json\n  aiconform ./my-plugin --rule AP006\n  aiconform --list-rules\n\nExit codes: 0 = passed/list/help, 1 = conformance failure, 2 = usage error or incomplete check.');
   command.action((directory: string | undefined, options: { format: 'terminal' | 'json'; listRules?: boolean; rule?: string }) => {
     if (options.listRules) {
       if (directory || options.rule) command.error('--list-rules cannot be combined with a directory or --rule.', { exitCode: 2 });

@@ -1,4 +1,4 @@
-name: Verify AgentCheck
+name: Verify AIAgentConform
 on:
   push:
   pull_request:

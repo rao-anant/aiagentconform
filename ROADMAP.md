@@ -3,7 +3,7 @@
 ## Implemented
 
 - Node.js, strict TypeScript, Commander, Ajv, and Vitest foundation
-- `agentcheck <plugin-directory>` with terminal and structured JSON reports
+- `aiconform <plugin-directory>` with terminal and structured JSON reports
 - First Agent Plugins 1.0.0 module with 20 static checks and stable rule IDs
 - Official schema vendoring, specification references, and scope documentation
 - Valid/invalid fixtures and per-rule tests

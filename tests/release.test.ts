@@ -14,7 +14,7 @@ const validateOutput = new Ajv2020({ strict: true, allErrors: true }).compile(ou
 const fixture = (name: string) => path.resolve('fixtures/agent-plugins', name);
 const temp: string[] = [];
 function copy(name = 'minimal'): string {
-  const root = mkdtempSync(path.join(tmpdir(), 'agentcheck-review-')); temp.push(root);
+  const root = mkdtempSync(path.join(tmpdir(), 'aiconform-review-')); temp.push(root);
   cpSync(fixture(name), root, { recursive: true }); return root;
 }
 function json(root: string, file: string, value: unknown): void { writeFileSync(path.join(root, file), JSON.stringify(value)); }
@@ -27,7 +27,7 @@ afterEach(() => { for (const root of temp.splice(0)) rmSync(root, { recursive: t
 
 describe('public CLI contract', () => {
   it('prints a concise success summary based on rules, not findings', () => {
-    expect(run([fixture('valid')])).toEqual({ code: 0, err: '', out: 'AgentCheck - Agent Plugins 1.0\n✓ 20/20 conformance checks passed\n' });
+    expect(run([fixture('valid')])).toEqual({ code: 0, err: '', out: 'AIAgentConform - Agent Plugins 1.0\n✓ 20/20 conformance checks passed\n' });
     expect(run([fixture('valid'), '--format', 'terminal']).out).toBe(run([fixture('valid')]).out);
   });
   it('reports failures with rule, location, problem and official reference', () => {
@@ -86,7 +86,7 @@ describe('public CLI contract', () => {
     const error = JSON.parse(result.out); expect(error.kind).toBe('error'); expect(error.code).toBe('CLI_USAGE'); expect(validateOutput(error)).toBe(true);
   });
   it('treats format-looking paths after -- as positionals', () => {
-    const result = run(['--', '--format=json']); expect(result.code).toBe(1); expect(result.out).toContain('AgentCheck -');
+    const result = run(['--', '--format=json']); expect(result.code).toBe(1); expect(result.out).toContain('AIAgentConform -');
   });
 });
 

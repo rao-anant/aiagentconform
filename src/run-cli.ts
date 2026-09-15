@@ -17,7 +17,7 @@ export function runCli(args: string[], version: string, io: CliIO): number {
     const usage = error instanceof CommanderError;
     const report: CliError = {
       reportVersion: '1', kind: 'error', code: usage ? 'CLI_USAGE' : 'INTERNAL_ERROR',
-      message: usage ? error.message.replace(/^error: /, '') : 'AgentCheck could not complete the check because of an internal error.',
+      message: usage ? error.message.replace(/^error: /, '') : 'AIAgentConform could not complete the check because of an internal error.',
     };
     // Recognize the requested output format even if argument parsing stopped early.
     let format = 'terminal';
@@ -28,7 +28,7 @@ export function runCli(args: string[], version: string, io: CliIO): number {
       else if (arg.startsWith('-f') && arg.length > 2) format = arg.slice(2);
     }
     if (format === 'json') io.out(formatJson(report) + '\n');
-    else io.err(`AgentCheck: ${report.message}\n`);
+    else io.err(`AIAgentConform: ${report.message}\n`);
     return 2;
   }
 }

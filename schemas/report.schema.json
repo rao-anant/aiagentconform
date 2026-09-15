@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "AgentCheck CLI JSON output v1",
+  "title": "AIAgentConform CLI JSON output v1",
   "description": "Stable public CLI output contract. See docs/json-output.md for semantic invariants and exit codes.",
   "oneOf": [
     {

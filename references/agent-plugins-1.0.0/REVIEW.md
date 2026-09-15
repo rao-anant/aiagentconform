@@ -33,7 +33,7 @@ copies. The checklist is non-normative. No newer format is implicitly accepted.
 ## Interpretation boundaries
 
 - **Extensions:** §8.1 describes object values while also requiring unimplemented
-  namespace values to be ignored without validation. AgentCheck implements no
+  namespace values to be ignored without validation. AIAgentConform implements no
   namespaces and follows the latter loader behavior. It is a supported static
   check set, not exhaustive package certification. Namespace syntax has no
   normative grammar, and client-specific file classification is not inferred.
@@ -41,7 +41,7 @@ copies. The checklist is non-normative. No newer format is implicitly accepted.
   examples. The current rule accepts Unicode lowercase letters and numbers;
   no normalization or ASCII-only restriction is invented.
 - **Commands:** A token can name an executable whose filename contains punctuation
-  or spaces. AgentCheck accepts spaces for explicit ./ paths and rejects whitespace
+  or spaces. AIAgentConform accepts spaces for explicit ./ paths and rejects whitespace
   in bare command strings as apparent multiple tokens. Bare-name whitespace remains
   an unresolved portability ambiguity. It does not interpret shell metacharacters.
 - **Data paths:** A lexical `..` can be contained after symlink resolution or can

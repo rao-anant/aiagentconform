@@ -5,11 +5,18 @@
 Initial release candidate. No npm package or GitHub release has been published
 from this repository.
 
+### Renamed
+
+- Product: AIAgentConform; npm package: `aiagentconform`; CLI: `aiconform`.
+- Updated documentation, CLI messages, tests, and CI examples.
+- AP001–AP020 IDs, validation behavior, report version, and package version are unchanged.
+- Existing GitHub repository links retain their actual remote address.
+
 ### Added
 
 - Agent Plugins 1.0.0 static module with AP001–AP020, official references,
   vendored schemas, and valid/invalid fixtures.
-- `agentcheck <plugin-directory>` with terminal and JSON formats, help/version,
+- `aiconform <plugin-directory>` with terminal and JSON formats, help/version,
   rule listing, and individual-rule selection with prerequisite handling.
 - Concise rule-based terminal summaries and failure-level specification links.
 - Version 1 JSON output schema, explicit skipped/incomplete results, and

@@ -2,7 +2,7 @@ import type { Report, RuleList } from '../core/report.js';
 
 // Escape controls, including bidi overrides, from package-controlled text.
 const safe = (text: string) => text.replace(/[\u0000-\u001f\u007f-\u009f\u202a-\u202e\u2066-\u2069]/g, char => `\\u${char.charCodeAt(0).toString(16).padStart(4, '0')}`);
-const heading = 'AgentCheck - Agent Plugins 1.0';
+const heading = 'AIAgentConform - Agent Plugins 1.0';
 
 export function formatTerminal(report: Report): string {
   const lines = [heading];

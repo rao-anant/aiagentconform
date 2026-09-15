@@ -7,7 +7,7 @@ function run(args: string[]): { output: string; code: number } {
   return { output, code };
 }
 
-describe('agentcheck', () => {
+describe('aiconform', () => {
   it('reports individual failures and rule IDs with a failing exit code', () => {
     const { output, code } = run(['fixtures/agent-plugins/invalid/ap006']);
     expect(output).toContain('FAIL AP006'); expect(code).toBe(1);

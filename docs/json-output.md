@@ -1,7 +1,7 @@
 # JSON output contract, version 1
 
-Use `agentcheck <directory> --format json` or
-`agentcheck --list-rules --format json`. The CLI writes exactly one JSON object
+Use `aiconform <directory> --format json` or
+`aiconform --list-rules --format json`. The CLI writes exactly one JSON object
 and a trailing newline to stdout. JSON usage errors also go to stdout; stderr
 is empty for handled errors in JSON mode. `--help` and `--version` always produce
 plain text and exit 0. Process-level failures, such as a broken Node installation,
@@ -9,7 +9,7 @@ are outside this contract.
 
 The machine-readable JSON Schema (draft 2020-12) is
 [schemas/report.schema.json](../schemas/report.schema.json). Installed consumers
-can resolve it as `agentcheck/report.schema.json`. It defines all three output
+can resolve it as `aiagentconform/report.schema.json`. It defines all three output
 kinds. It is shipped with the package and does not need a network fetch.
 
 ## Compatibility policy
