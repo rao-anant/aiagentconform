@@ -15,7 +15,17 @@ const npm = process.platform === 'win32' ? 'npm.cmd' : 'npm';
 const npmOptions = { cwd: root, encoding: 'utf8', shell: process.platform === 'win32', timeout: 120_000 };
 const packed = JSON.parse(execFileSync(npm, ['pack', '--json', '--pack-destination', artifacts], npmOptions))[0];
 const files = new Set(packed.files.map(file => file.path));
-for (const file of ['dist/cli.js', 'schemas/report.schema.json', 'dist/protocols/agent-plugins/schemas/plugin.schema.json', 'dist/protocols/agent-plugins/schemas/mcp.schema.json', 'references/agent-plugins-1.0.0/Apache-2.0.txt', 'CHANGELOG.md', 'CONTRIBUTING.md']) assert(files.has(file), `Missing package file: ${file}`);
+for (const file of [
+  'dist/cli.js',
+  'schemas/report.schema.json',
+  'dist/protocols/agent-plugins/schemas/plugin.schema.json',
+  'dist/protocols/agent-plugins/schemas/mcp.schema.json',
+  // Attribution and license for the redistributed upstream schemas.
+  'references/agent-plugins-1.0.0/NOTICE.md',
+  'references/agent-plugins-1.0.0/Apache-2.0.txt',
+  'CHANGELOG.md',
+  'CONTRIBUTING.md',
+]) assert(files.has(file), `Missing package file: ${file}`);
 assert(![...files].some(file => /^(tests|fixtures|node_modules|scripts|\.github)\//.test(file)), 'Development-only files leaked into package');
 const artifact = path.join(artifacts, packed.filename);
 const install = mkdtempSync(path.join(tmpdir(), 'aiconform-package-'));
