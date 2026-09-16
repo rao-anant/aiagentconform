@@ -18,13 +18,26 @@ AIAgentConform - Agent Plugins 1.0
 ✓ 20/20 conformance checks passed
 ```
 
-**Release status:** v0.1.0 is a local release candidate, not yet published to npm.
+**Release status:** v0.1.1 is prepared for publication to npm.
 Only Agent Plugins 1.0.0 is supported; passing the implemented checks is not
 certification of complete package or executing-client conformance.
 
 ## Install and try it now
 
-Requires Node.js **22.12 or newer** and npm. From a checkout of this repository:
+Requires Node.js **22.12 or newer** and npm. Once v0.1.1 is published:
+
+```sh
+npm install --global aiagentconform@0.1.1
+aiconform ./my-plugin
+
+# Or run without a global installation.
+npx --yes --package=aiagentconform@0.1.1 aiconform ./my-plugin
+```
+
+The npm package is `aiagentconform`; its executable is `aiconform`. Verify the
+package owner before using a newly published registry package.
+
+From a checkout of this repository:
 
 ```sh
 npm ci
@@ -33,31 +46,9 @@ node dist/cli.js fixtures/agent-plugins/valid
 node dist/cli.js fixtures/agent-plugins/invalid/ap006
 ```
 
-The deliberately invalid example exits 1. To install the command from a local
-package, or try it through npx:
-
-```sh
-npm pack --pack-destination .
-npm install --global ./aiagentconform-0.1.0.tgz
-aiconform ./my-plugin
-
-# Alternative: use the local tarball without a global installation.
-npx --yes --package=./aiagentconform-0.1.0.tgz aiconform ./my-plugin
-```
-
-The npm package is `aiagentconform`; its executable is `aiconform`. After a local
-installation, `npx aiconform --help` resolves that executable. Outside a project
-with it installed, use the explicit `--package` form above to avoid looking up
-a different npm package named `aiconform`.
-
-For development, `npm link` after building also exposes `aiconform`.
-`npm run verify` produces and tests a release tarball under `.artifacts/`.
-
-After a maintainer publishes this project under its intended npm name, the
-planned registry commands are `npm install --global aiagentconform@0.1.0` and
-`npx --yes --package=aiagentconform@0.1.0 aiconform ./my-plugin`. **Those are not installation instructions
-for the current unpublished checkout.** Always verify the package owner before
-using a newly published registry package.
+The deliberately invalid example exits 1. For development, `npm link` after
+building also exposes `aiconform`. `npm run verify` produces and tests a release
+tarball under `.artifacts/`.
 
 ## Examples
 
@@ -118,20 +109,17 @@ See [JSON output documentation](docs/json-output.md) and the
 [JSON Schema](schemas/report.schema.json). Use the CLI directly when redirecting
 JSON; `npm start` can add npm's own script banners.
 
-To use the local release candidate in a plugin repository, copy the reviewed
-tarball into a directory such as `tools/`, then install it as a devDependency:
+For CI after publication, add the pinned package as a devDependency:
 
 ```sh
-npm install --save-dev ./tools/aiagentconform-0.1.0.tgz
+npm install --save-dev aiagentconform@0.1.1
 npx --no-install aiconform ./plugin
 ```
 
-Commit the tarball, `package.json`, and `package-lock.json` in that repository.
 Copy [examples/aiconform.yml](examples/aiconform.yml) to
 `.github/workflows/aiconform.yml` and adjust `./plugin`. Its check step propagates
 both failure and incomplete exit codes to GitHub Actions; it does not hide errors
-with `continue-on-error`. After publication, a pinned registry devDependency can
-replace the tarball without changing the check command.
+with `continue-on-error`.
 
 ## Supported rules
 
@@ -205,7 +193,7 @@ npm run test:watch
 ```
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for adding cited, deterministic checks and
-[CHANGELOG.md](CHANGELOG.md) for v0.1.0 changes. The next priorities are clarifying
+[CHANGELOG.md](CHANGELOG.md) for release changes. The next priorities are clarifying
 specification ambiguities, broader platform verification, more justified static
 coverage, and separately classified advisory rules. See [ROADMAP.md](ROADMAP.md)
 for the full direction.
