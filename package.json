@@ -1,0 +1,71 @@
+{
+  "name": "agentcheck",
+  "version": "0.1.0",
+  "description": "Static Agent Plugins 1.0 conformance checks for plugin authors and CI",
+  "license": "MIT",
+  "author": "Anant Rao",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rao-anant/agentcheck.git"
+  },
+  "homepage": "https://github.com/rao-anant/agentcheck#readme",
+  "bugs": {
+    "url": "https://github.com/rao-anant/agentcheck/issues"
+  },
+  "type": "module",
+  "bin": {
+    "agentcheck": "dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "schemas",
+    "docs",
+    "references",
+    "examples",
+    "README.md",
+    "ROADMAP.md",
+    "CHANGELOG.md",
+    "CONTRIBUTING.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "start": "node dist/cli.js",
+    "prepack": "npm run build",
+    "check": "npm test && npm run typecheck && npm run build",
+    "verify:package": "node scripts/verify-package.mjs",
+    "verify": "npm run check && npm run verify:package",
+    "prepublishOnly": "npm run verify"
+  },
+  "dependencies": {
+    "ajv": "^8.20.0",
+    "commander": "^15.0.0",
+    "yaml": "^2.9.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.2",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.0"
+  },
+  "keywords": [
+    "agentcheck",
+    "agent-plugins",
+    "ai-agents",
+    "conformance",
+    "validation",
+    "cli"
+  ],
+  "exports": {
+    "./report.schema.json": "./schemas/report.schema.json"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  }
+}

@@ -1,0 +1,3 @@
+#!/bin/sh
+# Fixture only. AgentCheck must never execute this file.
+exit 99

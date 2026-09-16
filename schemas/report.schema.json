@@ -1,0 +1,374 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AgentCheck CLI JSON output v1",
+  "description": "Stable public CLI output contract. See docs/json-output.md for semantic invariants and exit codes.",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/report"
+    },
+    {
+      "$ref": "#/$defs/ruleList"
+    },
+    {
+      "$ref": "#/$defs/error"
+    }
+  ],
+  "$defs": {
+    "rule": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^AP[0-9]{3}$"
+        },
+        "title": {
+          "type": "string"
+        },
+        "explanation": {
+          "type": "string"
+        },
+        "category": {
+          "const": "conformance"
+        },
+        "references": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "section": {
+                "type": "string"
+              },
+              "url": {
+                "type": "string",
+                "pattern": "^https://"
+              }
+            },
+            "required": [
+              "section",
+              "url"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 1
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "explanation",
+        "category",
+        "references"
+      ],
+      "additionalProperties": false
+    },
+    "finding": {
+      "type": "object",
+      "properties": {
+        "ruleId": {
+          "type": "string",
+          "pattern": "^AP[0-9]{3}$"
+        },
+        "severity": {
+          "enum": [
+            "PASS",
+            "FAIL"
+          ]
+        },
+        "path": {
+          "type": "string"
+        },
+        "explanation": {
+          "type": "string"
+        },
+        "failureBoundary": {
+          "enum": [
+            "plugin",
+            "component",
+            "skill",
+            "server",
+            "field"
+          ]
+        }
+      },
+      "required": [
+        "ruleId",
+        "severity",
+        "path",
+        "explanation",
+        "failureBoundary"
+      ],
+      "additionalProperties": false
+    },
+    "skippedCheck": {
+      "type": "object",
+      "properties": {
+        "ruleId": {
+          "type": "string",
+          "pattern": "^AP[0-9]{3}$"
+        },
+        "path": {
+          "type": "string"
+        },
+        "reason": {
+          "enum": [
+            "not-applicable",
+            "prerequisite-failed",
+            "client-context-required",
+            "inspection-error"
+          ]
+        },
+        "explanation": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "ruleId",
+        "path",
+        "reason",
+        "explanation"
+      ],
+      "additionalProperties": false
+    },
+    "report": {
+      "type": "object",
+      "properties": {
+        "reportVersion": {
+          "const": "1"
+        },
+        "protocol": {
+          "const": "agent-plugins"
+        },
+        "specificationVersion": {
+          "const": "1.0.0"
+        },
+        "kind": {
+          "const": "report"
+        },
+        "target": {
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "PASS",
+            "FAIL",
+            "INCOMPLETE"
+          ]
+        },
+        "selectedRules": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^AP[0-9]{3}$"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "rulesRun": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "summary": {
+          "type": "object",
+          "properties": {
+            "passed": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "failed": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "passed",
+            "failed"
+          ],
+          "additionalProperties": false
+        },
+        "ruleSummary": {
+          "type": "object",
+          "properties": {
+            "total": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "passed": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "failed": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "skipped": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "total",
+            "passed",
+            "failed",
+            "skipped"
+          ],
+          "additionalProperties": false
+        },
+        "results": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "ruleId": {
+                "type": "string",
+                "pattern": "^AP[0-9]{3}$"
+              },
+              "status": {
+                "enum": [
+                  "PASS",
+                  "FAIL",
+                  "SKIP"
+                ]
+              }
+            },
+            "required": [
+              "ruleId",
+              "status"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "rules": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/rule"
+          }
+        },
+        "findings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/finding"
+          }
+        },
+        "prerequisiteFindings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/finding"
+          }
+        },
+        "skipped": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/skippedCheck"
+          }
+        },
+        "advisories": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "ruleId": {
+                "type": "string"
+              },
+              "severity": {
+                "const": "WARN"
+              },
+              "explanation": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "ruleId",
+              "severity",
+              "explanation"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "reportVersion",
+        "protocol",
+        "specificationVersion",
+        "kind",
+        "target",
+        "status",
+        "selectedRules",
+        "rulesRun",
+        "summary",
+        "ruleSummary",
+        "results",
+        "rules",
+        "findings",
+        "prerequisiteFindings",
+        "skipped",
+        "advisories",
+        "limitations"
+      ],
+      "additionalProperties": false
+    },
+    "ruleList": {
+      "type": "object",
+      "properties": {
+        "reportVersion": {
+          "const": "1"
+        },
+        "protocol": {
+          "const": "agent-plugins"
+        },
+        "specificationVersion": {
+          "const": "1.0.0"
+        },
+        "kind": {
+          "const": "rules"
+        },
+        "rules": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/rule"
+          }
+        }
+      },
+      "required": [
+        "reportVersion",
+        "protocol",
+        "specificationVersion",
+        "kind",
+        "rules"
+      ],
+      "additionalProperties": false
+    },
+    "error": {
+      "type": "object",
+      "properties": {
+        "reportVersion": {
+          "const": "1"
+        },
+        "kind": {
+          "const": "error"
+        },
+        "code": {
+          "enum": [
+            "CLI_USAGE",
+            "INTERNAL_ERROR"
+          ]
+        },
+        "message": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "reportVersion",
+        "kind",
+        "code",
+        "message"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

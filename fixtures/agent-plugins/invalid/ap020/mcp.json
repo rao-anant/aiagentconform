@@ -1,0 +1,13 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json",
+  "mcpServers": {
+    "invalid": {
+      "type": "streamable-http",
+      "url": "http://example.com/mcp",
+      "headers": {
+        "X-Tenant": "a",
+        "x-tenant": "b"
+      }
+    }
+  }
+}

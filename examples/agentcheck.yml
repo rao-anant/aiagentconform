@@ -1,0 +1,25 @@
+# Copy to .github/workflows/agentcheck.yml in a plugin repository.
+# Prerequisite: install a reviewed local AgentCheck tarball as a devDependency
+# and commit package.json, package-lock.json, and that tarball to your repository.
+# After public release, a pinned registry devDependency can replace the tarball.
+name: AgentCheck conformance
+on:
+  pull_request:
+  push:
+permissions:
+  contents: read
+jobs:
+  conformance:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci --ignore-scripts
+      # Change ./plugin to the directory containing your root plugin.json.
+      # npx cannot download another package because --no-install is set.
+      # AgentCheck exits 1 for non-conformance and 2 for incomplete checks/errors;
+      # either result fails this step and the job. Do not use continue-on-error.
+      - run: npx --no-install agentcheck ./plugin

@@ -1,0 +1,4 @@
+{
+  "$schema": "https://example.com/unrecognized.schema.json",
+  "name": "example.plugin"
+}
