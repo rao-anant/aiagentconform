@@ -54,6 +54,11 @@ Each finding has `ruleId`, `severity` (`PASS` or `FAIL`), `path`, `explanation`,
 and `failureBoundary` (`plugin`, `component`, `skill`, `server`, or `field`).
 The boundary describes the specified loader impact, not the CLI's exit code.
 A non-fatal field violation can still fail a package conformance check.
+For AP009, a non-object extension member produces `FAIL` with a member JSON
+Pointer and `failureBoundary: "field"`. This is a package-shape finding, not an
+instruction to reject a plugin at runtime: clients ignore unimplemented
+namespaces, and independent component checks continue. Object contents are
+not validated.
 
 A finding's `path` is a display location, usually plugin-relative using `/`,
 optionally followed by `#` and a JSON Pointer. Pointer tokens escape `~` as `~0`

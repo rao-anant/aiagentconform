@@ -10,7 +10,7 @@ from this repository.
 - Product: AIAgentConform; npm package: `aiagentconform`; CLI: `aiconform`.
 - Updated documentation, CLI messages, tests, and CI examples.
 - AP001–AP020 IDs, validation behavior, report version, and package version are unchanged.
-- Existing GitHub repository links retain their actual remote address.
+- Repository metadata now targets `rao-anant/aiagentconform`.
 
 ### Added
 
@@ -25,6 +25,10 @@ from this repository.
   workflow, and isolated npm tarball/CLI verification.
 
 ### Corrected during pre-release review
+
+- AP009 now rejects non-object extension member values for package conformance,
+  separately from client ignore behavior; namespace object contents remain opaque
+  and independent component checks continue. Other rule behavior is unchanged.
 
 - Distinguish inspection failures from invalid package syntax.
 - Reject malformed UTF-8 instead of silently decoding replacement characters.

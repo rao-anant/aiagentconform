@@ -10,7 +10,7 @@ const definitions = [
   ['AP006', 'Plugin name', 'Validate the manifest name length, characters, boundaries, and repetitions.', '5.5', '55-plugin-name-constraints'],
   ['AP007', 'Manifest metadata', 'Validate optional portable metadata against the official schema, without extra format constraints.', '5.4', '54-metadata-fields'],
   ['AP008', 'Unknown manifest fields', 'Report every unknown top-level field; ignore it when discovering components.', '5.2', '52-manifest-object'],
-  ['AP009', 'Extensions container', 'Report a non-object extensions field but continue discovery; leave unimplemented namespace values opaque.', '8.1', '81-manifest-extension-data'],
+  ['AP009', 'Extensions package shape', 'Require an object extensions container and object member values for package conformance. Do not validate object contents; clients ignore unimplemented namespaces, and component checks continue.', '8.1', '81-manifest-extension-data'],
   ['AP010', 'Fixed component locations', 'Allow absent components; require skills to be a directory and mcp.json a regular file when present.', '6.1–6.2', '6-component-discovery'],
   ['AP011', 'Skill frontmatter', 'Discover immediate child SKILL.md files only and parse their YAML frontmatter as a mapping.', '7.1', '71-skills'],
   ['AP012', 'Skill fields', 'Validate required skill name/description and documented optional field types and lengths.', '7.1', '71-skills'],

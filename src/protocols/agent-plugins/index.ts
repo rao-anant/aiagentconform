@@ -74,7 +74,17 @@ export function checkPlugin(directory: string, selectedRule?: string): Report {
   const unknown = Object.keys(manifest).filter(key => !manifestFields.includes(key)).sort();
   if (!unknown.length) add(8, true, 'plugin.json', 'No unknown top-level fields.', 'field');
   for (const key of unknown) add(8, false, `plugin.json#/${pointer(key)}`, 'Unknown top-level manifest field; ignored for component discovery.', 'field');
-  add(9, !('extensions' in manifest) || object(manifest.extensions), 'plugin.json#/extensions', 'extensions must be an object when present; a non-object is ignored. Unimplemented namespace values remain opaque.', 'field');
+  add(9, !('extensions' in manifest) || object(manifest.extensions), 'plugin.json#/extensions', 'Package conformance requires extensions to be an object when present. Clients report and ignore a non-object container.', 'field');
+  if (object(manifest.extensions)) {
+    // Package shape is distinct from client loading behavior (§8.1). All
+    // namespaces are unimplemented here; never validate their object contents
+    // or make these package findings block independent component discovery.
+    for (const namespace of Object.keys(manifest.extensions).sort()) {
+      if (!object(manifest.extensions[namespace])) {
+        add(9, false, `plugin.json#/extensions/${pointer(namespace)}`, 'Package conformance requires each extensions member value to be an object. Clients must ignore unimplemented namespaces without validating their contents; component checks continue.', 'field');
+      }
+    }
+  }
   if (selected !== undefined && selected >= 4 && selected <= 9) return finish();
   if (!required || !schema || !name || !metadata) return finish(true);
 

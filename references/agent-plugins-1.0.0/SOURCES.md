@@ -27,10 +27,16 @@ Findings distinguish package failure from the loader's failure boundary.
 Unknown manifest fields and a non-object extensions field fail package checks
 but do not block independently valid components (§5.2, §8.1).
 
-Unimplemented extension values are opaque (§8.1), even though the JSON Schema
-describes object values. AIAgentConform implements no extension namespaces, so it
-does not inspect those values. Reverse-domain namespace syntax has no normative
-grammar; namespace spelling and client-file classification are deferred.
+AP009 was re-reviewed on 2026-09-15 against normative §8.1 and the official
+manifest schema linked above. Package conformance requires an object container
+and object member values. Client behavior is a separate obligation: ignore
+unimplemented namespaces without validating their contents. AP009 now checks
+only the package-level object types, reports non-object members as field
+failures, and continues checking components. It does not validate fields inside
+namespace objects. This corrects the earlier conflation of client ignore
+behavior with package conformance. No runtime client is implemented.
+Reverse-domain namespace syntax has no normative grammar; namespace spelling
+and client-file classification remain deferred.
 
 Skill naming prose says Unicode lowercase alphanumerics but also illustrates
 ASCII a-z/0-9. Accept Unicode lowercase letters and numbers, without normalization;

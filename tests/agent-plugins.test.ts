@@ -53,10 +53,31 @@ describe('manifest and discovery failure boundaries', () => {
     expect(report.findings.some(f => f.ruleId === 'AP012' && f.severity === 'PASS')).toBe(true);
     expect(report.findings.some(f => f.ruleId === 'AP020' && f.severity === 'PASS')).toBe(true);
   });
-  it('leaves unimplemented extension values opaque, overriding schema value validation', () => {
+  it.each([null, false, true, 42, 'text', []])('rejects non-object extension member %j for package conformance while continuing discovery', value => {
+    const root = copy('valid');
+    json(root, 'plugin.json', { $schema: PLUGIN_SCHEMA, name: 'good', extensions: { 'com.example.client': value } });
+    const report = checkPlugin(root);
+    expect(report.status).toBe('FAIL');
+    expect(report.findings.filter(f => f.severity === 'FAIL')).toEqual([
+      expect.objectContaining({ ruleId: 'AP009', path: 'plugin.json#/extensions/com.example.client', failureBoundary: 'field' }),
+    ]);
+    expect(report.findings.some(f => f.ruleId === 'AP012' && f.severity === 'PASS')).toBe(true);
+    expect(report.findings.some(f => f.ruleId === 'AP020' && f.severity === 'PASS')).toBe(true);
+    const selected = checkPlugin(root, 'AP009');
+    expect(selected.status).toBe('FAIL');
+    expect(selected.prerequisiteFindings).toEqual([]);
+    expect(selected.findings.every(f => f.ruleId === 'AP009')).toBe(true);
+  });
+  it.each([{}, { 'com.example.client': {} }, { 'com.example.client': { unknown: null, nested: { setting: false }, arbitrary: [1, 'text'] } }])('accepts extension object shape without validating namespace contents: %j', extensions => {
     const root = copy();
-    json(root, 'plugin.json', { $schema: PLUGIN_SCHEMA, name: 'good', extensions: { 'com.example.client': false } });
+    json(root, 'plugin.json', { $schema: PLUGIN_SCHEMA, name: 'good', extensions });
+    expect(checkPlugin(root, 'AP009').status).toBe('PASS');
     expect(fails(root)).toEqual([]);
+  });
+  it('reports invalid extension members in sorted order with escaped JSON Pointer paths', () => {
+    const root = copy();
+    json(root, 'plugin.json', { $schema: PLUGIN_SCHEMA, name: 'good', extensions: { 'com.z': 0, 'com.a/~': null, 'com.valid': {} } });
+    expect(fails(root).map(f => f.path)).toEqual(['plugin.json#/extensions/com.a~1~0', 'plugin.json#/extensions/com.z']);
   });
   it.each([null, [], 4, 'text'])('rejects non-object manifests: %j', value => {
     const root = copy(); json(root, 'plugin.json', value);

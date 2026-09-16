@@ -6,11 +6,11 @@
   "author": "Anant Rao",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/rao-anant/agentcheck.git"
+    "url": "https://github.com/rao-anant/aiagentconform"
   },
-  "homepage": "https://github.com/rao-anant/agentcheck#readme",
+  "homepage": "https://github.com/rao-anant/aiagentconform#readme",
   "bugs": {
-    "url": "https://github.com/rao-anant/agentcheck/issues"
+    "url": "https://github.com/rao-anant/aiagentconform/issues"
   },
   "type": "module",
   "bin": {

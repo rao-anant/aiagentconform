@@ -1,20 +1,20 @@
 # v0.1.0 release readiness
 
-This checkout is a release candidate. No package, release, branch, or tag has
-been published or pushed by the implementation work.
+This checkout is a release candidate. No npm package or GitHub release has
+been published by this work. The initial source push preceded these local fixes.
 
 Before a maintainer makes a public release:
 
 - Original author attribution is recorded as Anant Rao. The canonical repository
-  is https://github.com/rao-anant/agentcheck; `repository`, `homepage`, and `bugs`
-  metadata are configured. GitHub authentication and the initial push remain
-  to be completed.
+  is https://github.com/rao-anant/aiagentconform; `repository`, `homepage`, and `bugs`
+  metadata are configured. GitHub authentication and the initial source push
+  were completed.
 - Confirm npm account ownership and availability of the new package name
   `aiagentconform`. Previous registry checks for the old name do not establish
   availability or publishing rights for the new name.
 - Run the committed GitHub matrix in the eventual public repository. Local
   verification cannot establish hosted Linux/macOS results or Windows support.
-- Review the documented static coverage, especially extension/command ambiguities
+- Review the documented static coverage, especially command portability limits
   and client-data cwd checks that return INCOMPLETE. Do not advertise exhaustive
   client conformance or runtime security guarantees.
 - Set the release date in CHANGELOG.md only when release actually occurs, and
@@ -31,7 +31,5 @@ it does not itself publish. No publish or push command is part of verification.
 can be installed and used by CI today without a registry release. Review its
 contents and checksums before distribution.
 
-The GitHub repository URL still uses its existing name, `rao-anant/agentcheck`.
-That remote repository has not been renamed; retaining its real URL keeps
-repository, homepage, and issue links correct. The local checkout directory and
-Git history may also retain the old name.
+Repository metadata now targets `rao-anant/aiagentconform`. Historical Git
+commit messages and reflogs retain the previous project name intentionally.

@@ -18,3 +18,7 @@ isolation. They never execute scripts or connect to MCP servers.
 It exits 2 rather than guessing a containment result. The AP019 invalid fixture
 uses a resolvable plugin-root escape; the complete valid fixture uses data
 placeholders only in opaque args/env, not in cwd.
+
+`agent-plugins/invalid/ap009-member` fails package conformance because its
+extension member is not an object. It complements the non-object container
+fixture at `invalid/ap009`; namespace object contents are not validated.

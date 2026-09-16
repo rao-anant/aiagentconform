@@ -62,6 +62,8 @@ try {
   run([fixture('valid'), '--format', 'terminal'], 0);
   run([fixture('valid'), '--format', 'json'], 0, true);
   run([fixture('minimal'), '--format', 'json'], 0, true);
+  const extensionReport = run([fixture('invalid/ap009-member'), '--rule', 'AP009', '--format', 'json'], 1, true);
+  assert(extensionReport.findings.some(f => f.ruleId === 'AP009' && f.severity === 'FAIL' && f.path === 'plugin.json#/extensions/com.example.client'));
   run(['--list-rules'], 0);
   assert.equal(run(['--list-rules', '--format=json'], 0, true).rules.length, 20);
   for (let index = 1; index <= 20; index++) {

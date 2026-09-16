@@ -104,6 +104,12 @@ fixture reports 10 passed and 10 skipped instead of claiming 20 checks ran.
 Advisory quality warnings are separate from conformance findings; no advisory
 rules are enabled in v0.1.
 
+AP009 checks **package conformance**: each `extensions` member must be an object.
+It does not validate fields inside that object. Separately, a conformant client
+must ignore namespaces it does not implement without validating their contents.
+An AP009 package failure therefore does not mean a client should reject the
+plugin; independent component checks continue. See specification §8.1.
+
 ## JSON and CI
 
 JSON output has a versioned, documented contract with structured findings,
@@ -139,7 +145,7 @@ replace the tarball without changing the check command.
 | AP006 | Plugin name characters, length, and boundaries | §5.5 |
 | AP007 | Optional metadata types and closed author object | §5.4 |
 | AP008 | Unknown manifest fields, reported and ignored | §5.2 |
-| AP009 | Extensions container; unimplemented values remain opaque | §8.1 |
+| AP009 | Extensions container and member object types; object contents remain opaque | §8.1 |
 | AP010 | Fixed component locations, kinds, and valid absence | §6.1–6.2 |
 | AP011 | Immediate-child SKILL.md discovery and YAML frontmatter | §7.1; Agent Skills format |
 | AP012 | Skill name/directory match, description, optional field constraints | §7.1; Agent Skills frontmatter |

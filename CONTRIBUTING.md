@@ -36,7 +36,9 @@ installation. It never publishes or runs plugin code. Use `npm test` or
 4. Implement the check in the protocol module. Use the vendored schema when
    applicable; normative prose wins over schema bugs. Do not fetch a schema
    named by an input file, execute a command, or connect to a server. Keep
-   extension payloads opaque and arguments/env values separate from paths.
+   extension object contents opaque and arguments/env values separate from paths.
+   AP009 checks container/member object types for package conformance; this is
+   distinct from the client requirement to ignore unimplemented namespaces.
 5. Preserve failure isolation. Return PASS/FAIL findings through `Evaluation`,
    with a location and the narrowest specified loader boundary. If a prerequisite
    or client context is unavailable, use an explicit skip instead of a guessed

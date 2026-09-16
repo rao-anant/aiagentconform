@@ -17,7 +17,7 @@ copies. The checklist is non-normative. No newer format is implicitly accepted.
 | AP006 | §5.5 | Added normative character guard: upstream `$` regex accepts a final newline in JavaScript. |
 | AP007 | §5.4 | Types only, closed author; no SemVer, URL, email, or SPDX format failures. |
 | AP008 | §5.2 | Every unknown field fails package conformance but does not prevent discovery. Findings sorted by key. |
-| AP009 | §8.1 | Non-object container reported and ignored. No unimplemented namespace payload validation. See ambiguity below. |
+| AP009 | §8.1 | Updated 2026-09-15: package container/member object types are checked; namespace object contents are not. Client ignore behavior is distinct; discovery continues. |
 | AP010 | §6.1–6.2 | Missing components valid; wrong filesystem kinds isolated. No requirement to populate skills or servers. |
 | AP011 | §7.1 + Agent Skills format | Immediate children only, exact regular SKILL.md. Non-skill children ignored. YAML delimiter whitespace accepted; strict UTF-8. |
 | AP012 | §7.1 + Agent Skills frontmatter | Names match directories; documented field types/limits only. Unicode naming ambiguity retained; unknown keys/body length not rejected. |
@@ -32,11 +32,14 @@ copies. The checklist is non-normative. No newer format is implicitly accepted.
 
 ## Interpretation boundaries
 
-- **Extensions:** §8.1 describes object values while also requiring unimplemented
-  namespace values to be ignored without validation. AIAgentConform implements no
-  namespaces and follows the latter loader behavior. It is a supported static
-  check set, not exhaustive package certification. Namespace syntax has no
-  normative grammar, and client-specific file classification is not inferred.
+- **Extensions (AP009 follow-up, 2026-09-15):** The earlier review incorrectly
+  used client ignore behavior to permit non-object package values. §8.1 and the
+  official schema require object member values for package conformance. AP009
+  now reports violations of that shallow type requirement without examining
+  object contents. Clients separately must ignore namespaces they do not
+  implement; these package findings do not block independent component checks.
+  Namespace syntax has no normative grammar, and client-specific file
+  classification is not inferred.
 - **Skill names:** The referenced prose combines Unicode terminology and ASCII
   examples. The current rule accepts Unicode lowercase letters and numbers;
   no normalization or ASCII-only restriction is invented.
