@@ -18,13 +18,13 @@ AIAgentConform - Agent Plugins 1.0
 ✓ 20/20 conformance checks passed
 ```
 
-**Release status:** v0.1.1 is prepared for publication to npm.
+**Release status:** v0.1.1 is published to npm.
 Only Agent Plugins 1.0.0 is supported; passing the implemented checks is not
 certification of complete package or executing-client conformance.
 
 ## Install and try it now
 
-Requires Node.js **22.12 or newer** and npm. Once v0.1.1 is published:
+Requires Node.js **22.12 or newer** and npm:
 
 ```sh
 npm install --global aiagentconform@0.1.1
