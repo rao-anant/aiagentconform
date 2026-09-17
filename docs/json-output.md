@@ -1,4 +1,8 @@
-# JSON output contract, version 1
+# JSON output contracts
+
+JSON version 1 remains the default contract throughout v0.2.x. `--json` is the
+documented shorthand for `--format json`; both produce the same v1 bytes for the
+same input.
 
 Use `aiconform <directory> --format json` or
 `aiconform --list-rules --format json`. The CLI writes exactly one JSON object
@@ -118,3 +122,51 @@ node dist/cli.js fixtures/agent-plugins/invalid/ap006 --format json
 node dist/cli.js fixtures/agent-plugins/incomplete/data-cwd --format json
 node dist/cli.js --list-rules --format json
 ```
+
+## JSON report version 2
+
+V2 is available only for package reports:
+
+```sh
+aiconform ./plugin --json --report-version 2
+```
+
+`--report-version 2` without `--json` is invalid usage and exits 2. In
+particular, `--format json --report-version 2` is not an alias for the explicit
+v2 opt-in. The closed draft 2020-12 schema is
+[schemas/report-v2.schema.json](../schemas/report-v2.schema.json), exported from
+the installed package as `aiagentconform/report-v2.schema.json`.
+
+V2 uses `reportVersion: "2"` and contains one catalog-ordered result for every
+AP001-AP020 rule. Each has exactly one execution outcome: `passed`, `failed`,
+`not_applicable`, `excluded`, or `unable_to_complete`. A reason is always
+present. `classification` is separate from outcome; all current AP rules are
+normative, and advisory classification does not affect the normative
+determination.
+
+Single-rule reports still contain all 20 rules. The selected rule has its actual
+outcome and the other 19 are `excluded` with the `--rule` selection reason.
+Prerequisite resolution, reads, parsing, and inspection appear in
+`inspection.evidence`, not as extra AP rules or inflated pass counts.
+
+The `inspection` object records manifest, standard-skills, and MCP presence and
+inspection status; extension namespace names; and MCP server declarations.
+Reports state explicitly that extension internals and referenced paths were not
+validated, servers were not executed, and endpoints were not contacted.
+`executionProblems` records filesystem, parser-resource, client-context, and
+prerequisite blockers. `scope` lists limitations and untested capabilities.
+
+Outcome summary counts total 20. `determination` is `pass`, `limited_pass`,
+`fail`, or `incomplete`. Excluded rules do not affect exit codes:
+
+| Code | JSON v2 and enhanced terminal meaning |
+| --- | --- |
+| 0 | Every selected rule passed or was legitimately not applicable |
+| 1 | At least one selected rule failed and none was unable to complete |
+| 2 | At least one selected rule was unable to complete, or CLI usage failed |
+
+For compatibility, JSON v1 retains failure-first status and exit 1 when a report
+contains both a conformance failure and incomplete inspection. Terminal and JSON
+v2 instead give `unable_to_complete` precedence and exit 2. This deliberate
+v0.2.x exception will be unified when JSON v2 becomes the default in a future
+major release.

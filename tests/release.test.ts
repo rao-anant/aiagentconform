@@ -27,7 +27,10 @@ afterEach(() => { for (const root of temp.splice(0)) rmSync(root, { recursive: t
 
 describe('public CLI contract', () => {
   it('prints a concise success summary based on rules, not findings', () => {
-    expect(run([fixture('valid')])).toEqual({ code: 0, err: '', out: 'AIAgentConform - Agent Plugins 1.0\n✓ 20/20 conformance checks passed\n' });
+    const result = run([fixture('valid')]);
+    expect(result.code).toBe(0); expect(result.err).toBe('');
+    expect(result.out).toContain('✓ QUALIFIED PASS - 20 rules passed.');
+    expect(result.out).toContain('MCP servers were not executed');
     expect(run([fixture('valid'), '--format', 'terminal']).out).toBe(run([fixture('valid')]).out);
   });
   it('reports failures with rule, location, problem and official reference', () => {
@@ -36,7 +39,7 @@ describe('public CLI contract', () => {
     expect(out).toContain('lowercase'); expect(out).toContain('https://agent-plugins.org/specification#55-plugin-name-constraints');
   });
   it('shows skipped optional checks without claiming all 20 passed', () => {
-    expect(run([fixture('minimal')]).out).toContain('10/20 conformance checks passed (10 skipped)');
+    expect(run([fixture('minimal')]).out).toContain('QUALIFIED PASS - 10 rules passed; 10 not applicable.');
   });
   it('provides help and version without a directory', () => {
     expect(run(['--version'])).toEqual({ code: 0, err: '', out: '0.1.0\n' });

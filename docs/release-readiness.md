@@ -1,7 +1,8 @@
-# v0.1.0 release readiness
+# v0.2.0 release readiness
 
-This checkout is a release candidate. No npm package or GitHub release has
-been published by this work. The initial source push preceded these local fixes.
+This checkout contains unreleased v0.2.0 implementation work. No npm package,
+tag, or GitHub release has been created for v0.2.0. v0.1.1 remains the published
+release.
 
 Before a maintainer makes a public release:
 
@@ -17,6 +18,11 @@ Before a maintainer makes a public release:
 - Review the documented static coverage, especially command portability limits
   and client-data cwd checks that return INCOMPLETE. Do not advertise exhaustive
   client conformance or runtime security guarantees.
+- Confirm JSON v1 compatibility and validate emitted JSON v2 reports against
+  `schemas/report-v2.schema.json`. The v2 package export is
+  `aiagentconform/report-v2.schema.json`; the existing v1 export is unchanged.
+- Review the deliberate v0.2.x exit-code exception: mixed failure/incomplete is
+  exit 1 in JSON v1 and exit 2 in terminal/JSON v2.
 - Set the release date in CHANGELOG.md only when release actually occurs, and
   change README registry-install examples from planned to available only after
   the correct package has been published.

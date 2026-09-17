@@ -1,0 +1,162 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/rao-anant/aiagentconform/blob/main/schemas/report-v2.schema.json",
+  "title": "AIAgentConform JSON report v2",
+  "description": "Closed schema for the opt-in AIAgentConform v2 report object.",
+  "type": "object",
+  "properties": {
+    "reportVersion": { "const": "2" },
+    "kind": { "const": "report" },
+    "tool": {
+      "type": "object",
+      "properties": { "name": { "const": "AIAgentConform" }, "version": { "type": "string", "minLength": 1 } },
+      "required": ["name", "version"], "additionalProperties": false
+    },
+    "protocol": {
+      "type": "object",
+      "properties": { "id": { "const": "agent-plugins" }, "specificationVersion": { "const": "1.0.0" } },
+      "required": ["id", "specificationVersion"], "additionalProperties": false
+    },
+    "input": {
+      "type": "object",
+      "properties": {
+        "argument": { "type": "string" }, "resolvedPath": { "type": "string" },
+        "packageIdentity": {
+          "type": "object", "properties": { "manifestName": { "type": ["string", "null"] } },
+          "required": ["manifestName"], "additionalProperties": false
+        }
+      },
+      "required": ["argument", "resolvedPath", "packageIdentity"], "additionalProperties": false
+    },
+    "selection": {
+      "type": "object",
+      "properties": {
+        "mode": { "enum": ["all", "single"] },
+        "selectedRuleIds": { "type": "array", "items": { "$ref": "#/$defs/ruleId" }, "minItems": 1, "uniqueItems": true }
+      },
+      "required": ["mode", "selectedRuleIds"], "additionalProperties": false
+    },
+    "rules": { "type": "array", "items": { "$ref": "#/$defs/ruleOutcome" }, "minItems": 20, "maxItems": 20 },
+    "findings": { "type": "array", "items": { "$ref": "#/$defs/finding" } },
+    "inspection": {
+      "type": "object",
+      "properties": {
+        "evidence": { "type": "array", "items": { "$ref": "#/$defs/evidence" } },
+        "components": {
+          "type": "object",
+          "properties": {
+            "manifest": { "$ref": "#/$defs/component" },
+            "standardSkills": { "$ref": "#/$defs/component" },
+            "mcp": { "$ref": "#/$defs/component" }
+          },
+          "required": ["manifest", "standardSkills", "mcp"], "additionalProperties": false
+        },
+        "extensionNamespaces": {
+          "type": "object",
+          "properties": {
+            "names": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+            "internalsValidated": { "const": false }, "referencedPathsValidated": { "const": false },
+            "statement": { "const": "Extension internals and referenced paths were not validated." }
+          },
+          "required": ["names", "internalsValidated", "referencedPathsValidated", "statement"], "additionalProperties": false
+        },
+        "mcpServers": {
+          "type": "object",
+          "properties": {
+            "declarations": { "type": "array", "items": { "$ref": "#/$defs/server" } },
+            "serversExecuted": { "const": false }, "endpointsContacted": { "const": false },
+            "statement": { "const": "MCP servers were not executed and declared endpoints were not contacted." }
+          },
+          "required": ["declarations", "serversExecuted", "endpointsContacted", "statement"], "additionalProperties": false
+        }
+      },
+      "required": ["evidence", "components", "extensionNamespaces", "mcpServers"], "additionalProperties": false
+    },
+    "executionProblems": { "type": "array", "items": { "$ref": "#/$defs/problem" } },
+    "scope": {
+      "type": "object",
+      "properties": {
+        "limitations": { "type": "array", "items": { "type": "string" } },
+        "untestedCapabilities": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }
+      },
+      "required": ["limitations", "untestedCapabilities"], "additionalProperties": false
+    },
+    "summary": {
+      "type": "object",
+      "properties": {
+        "total": { "const": 20 }, "selected": { "type": "integer", "minimum": 1, "maximum": 20 },
+        "passed": { "$ref": "#/$defs/count" }, "failed": { "$ref": "#/$defs/count" },
+        "notApplicable": { "$ref": "#/$defs/count" }, "excluded": { "$ref": "#/$defs/count" },
+        "unableToComplete": { "$ref": "#/$defs/count" }
+      },
+      "required": ["total", "selected", "passed", "failed", "notApplicable", "excluded", "unableToComplete"],
+      "additionalProperties": false
+    },
+    "determination": { "enum": ["pass", "limited_pass", "fail", "incomplete"] }
+  },
+  "required": ["reportVersion", "kind", "tool", "protocol", "input", "selection", "rules", "findings", "inspection", "executionProblems", "scope", "summary", "determination"],
+  "additionalProperties": false,
+  "$defs": {
+    "ruleId": { "type": "string", "pattern": "^AP(?:00[1-9]|01[0-9]|020)$" },
+    "count": { "type": "integer", "minimum": 0, "maximum": 20 },
+    "reference": {
+      "type": "object", "properties": { "section": { "type": "string" }, "url": { "type": "string", "pattern": "^https://" } },
+      "required": ["section", "url"], "additionalProperties": false
+    },
+    "ruleOutcome": {
+      "type": "object",
+      "properties": {
+        "id": { "$ref": "#/$defs/ruleId" }, "title": { "type": "string" },
+        "classification": { "enum": ["normative", "advisory"] },
+        "outcome": { "enum": ["passed", "failed", "not_applicable", "excluded", "unable_to_complete"] },
+        "reason": { "type": "string", "minLength": 1 },
+        "references": { "type": "array", "items": { "$ref": "#/$defs/reference" }, "minItems": 1 }
+      },
+      "required": ["id", "title", "classification", "outcome", "reason", "references"], "additionalProperties": false
+    },
+    "finding": {
+      "type": "object",
+      "properties": {
+        "ruleId": { "$ref": "#/$defs/ruleId" }, "result": { "enum": ["passed", "failed"] },
+        "path": { "type": "string" }, "explanation": { "type": "string" },
+        "boundary": { "enum": ["plugin", "component", "skill", "server", "field"] }
+      },
+      "required": ["ruleId", "result", "path", "explanation", "boundary"], "additionalProperties": false
+    },
+    "evidence": {
+      "type": "object",
+      "properties": {
+        "operation": { "enum": ["resolve", "discover", "read", "parse", "inspect"] },
+        "subject": { "type": "string" }, "status": { "enum": ["succeeded", "absent", "failed", "not_performed"] },
+        "detail": { "type": "string" }
+      },
+      "required": ["operation", "subject", "status", "detail"], "additionalProperties": false
+    },
+    "component": {
+      "type": "object",
+      "properties": {
+        "path": { "type": "string" }, "presence": { "enum": ["present", "absent", "unknown"] },
+        "inspection": { "enum": ["complete", "partial", "unable_to_complete", "not_applicable"] }
+      },
+      "required": ["path", "presence", "inspection"], "additionalProperties": false
+    },
+    "server": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" }, "transport": { "enum": ["stdio", "streamable-http", "sse", "unknown"] },
+        "endpoint": { "type": ["string", "null"] }
+      },
+      "required": ["name", "transport", "endpoint"], "additionalProperties": false
+    },
+    "problem": {
+      "type": "object",
+      "properties": {
+        "kind": { "enum": ["filesystem", "parser_resource", "client_context", "prerequisite"] },
+        "path": { "type": "string" },
+        "affectedRuleIds": { "type": "array", "items": { "$ref": "#/$defs/ruleId" }, "minItems": 1, "uniqueItems": true },
+        "reason": { "type": "string" }
+      },
+      "required": ["kind", "path", "affectedRuleIds", "reason"], "additionalProperties": false
+    }
+  }
+}

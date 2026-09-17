@@ -1,0 +1,9 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "csharp-dotnet-development",
+  "extensions": {
+    "com.github.awesome-copilot": {
+      "agents": ["agents/csharp-expert.md"]
+    }
+  }
+}

@@ -22,3 +22,9 @@ placeholders only in opaque args/env, not in cwd.
 `agent-plugins/invalid/ap009-member` fails package conformance because its
 extension member is not an object. It complements the non-object container
 fixture at `invalid/ap009`; namespace object contents are not validated.
+
+`agent-plugins/acceptance/csharp-dotnet-development` exercises absent standard
+components and the opaque `com.github.awesome-copilot` extension namespace.
+`agent-plugins/acceptance/context7` exercises a declared remote HTTP MCP server,
+including stdio-only not-applicable outcomes. The endpoint is recorded but is
+never contacted.

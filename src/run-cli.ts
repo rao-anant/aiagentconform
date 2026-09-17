@@ -24,6 +24,7 @@ export function runCli(args: string[], version: string, io: CliIO): number {
     for (let index = 0; index < args.length && args[index] !== '--'; index++) {
       const arg = args[index]!;
       if (arg === '--format' || arg === '-f') format = args[++index] ?? '';
+      else if (arg === '--json') format = 'json';
       else if (arg.startsWith('--format=')) format = arg.slice('--format='.length);
       else if (arg.startsWith('-f') && arg.length > 2) format = arg.slice(2);
     }

@@ -18,6 +18,7 @@ const files = new Set(packed.files.map(file => file.path));
 for (const file of [
   'dist/cli.js',
   'schemas/report.schema.json',
+  'schemas/report-v2.schema.json',
   'dist/protocols/agent-plugins/schemas/plugin.schema.json',
   'dist/protocols/agent-plugins/schemas/mcp.schema.json',
   // Attribution and license for the redistributed upstream schemas.
@@ -41,6 +42,8 @@ try {
   const require = createRequire(path.join(install, 'package.json'));
   const schemaPath = require.resolve(`${pkg.name}/report.schema.json`);
   const validate = new Ajv2020({ strict: true, allErrors: true }).compile(JSON.parse(readFileSync(schemaPath, 'utf8')));
+  const schemaV2Path = require.resolve(`${pkg.name}/report-v2.schema.json`);
+  const validateV2 = new Ajv2020({ strict: true, allErrors: true }).compile(JSON.parse(readFileSync(schemaV2Path, 'utf8')));
   const run = (args, expected, json = false) => {
     // Exercise npm's bin link directly on POSIX, and the installed entry on Windows.
     const command = process.platform === 'win32' ? process.execPath : executable;
@@ -65,12 +68,16 @@ try {
   });
   assert.match(viaNpx(['--help']), /Usage: aiconform/);
   assert.equal(viaNpx(['--version']).trim(), pkg.version);
-  assert.equal(viaNpx([fixture('valid')]), 'AIAgentConform - Agent Plugins 1.0\n✓ 20/20 conformance checks passed\n');
+  assert.match(viaNpx([fixture('valid')]), /QUALIFIED PASS - 20 rules passed/);
   console.log('Verified local npx aiconform --help, --version, and valid fixture.');
   assert.match(run(['--help'], 0), /--list-rules/);
-  assert.equal(run([fixture('valid')], 0), 'AIAgentConform - Agent Plugins 1.0\n✓ 20/20 conformance checks passed\n');
+  assert.match(run([fixture('valid')], 0), /QUALIFIED PASS - 20 rules passed/);
   run([fixture('valid'), '--format', 'terminal'], 0);
   run([fixture('valid'), '--format', 'json'], 0, true);
+  const reportV2 = JSON.parse(run([fixture('valid'), '--json', '--report-version', '2'], 0));
+  assert(validateV2(reportV2), JSON.stringify(validateV2.errors));
+  assert.equal(reportV2.rules.length, 20);
+  assert.equal(run([fixture('valid'), '--rule', 'AP006'], 0).includes('LIMITED PASS - 1 selected rule passed; 19 rules excluded.'), true);
   run([fixture('minimal'), '--format', 'json'], 0, true);
   const extensionReport = run([fixture('invalid/ap009-member'), '--rule', 'AP009', '--format', 'json'], 1, true);
   assert(extensionReport.findings.some(f => f.ruleId === 'AP009' && f.severity === 'FAIL' && f.path === 'plugin.json#/extensions/com.example.client'));
@@ -88,6 +95,7 @@ try {
   run([fixture('invalid/ap003'), '--rule', 'AP012', '--format', 'json'], 2, true);
   run([fixture('minimal'), '--rule', 'AP020', '--format', 'json'], 2, true);
   for (const args of [[], ['--unknown'], ['--rule', 'AP999'], ['--format', 'xml'], ['--list-rules', '--rule', 'AP001']]) run(args, 2);
+  run([fixture('valid'), '--report-version', '2'], 2);
   for (const args of [[], ['--unknown'], ['--rule', 'AP999']]) run([...args, '--format=json'], 2, true);
   console.log('Installed package verified: help/version, formats, catalog, all 20 rules and invalid fixtures, incomplete checks, usage errors, and JSON schemas.');
   console.log(`Release artifact: ${artifact}`);

@@ -1,6 +1,6 @@
 {
   "name": "aiagentconform",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Open-source conformance testing for AI agent protocols and standards.",
   "license": "MIT",
   "author": "Anant Rao",
@@ -63,7 +63,8 @@
     "aiconform"
   ],
   "exports": {
-    "./report.schema.json": "./schemas/report.schema.json"
+    "./report.schema.json": "./schemas/report.schema.json",
+    "./report-v2.schema.json": "./schemas/report-v2.schema.json"
   },
   "publishConfig": {
     "access": "public",

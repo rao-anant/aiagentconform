@@ -15,10 +15,17 @@ execute plugins or contact their configured servers.
 
 ```text
 AIAgentConform - Agent Plugins 1.0
-✓ 20/20 conformance checks passed
+Target: /path/to/plugin
+Components:
+  Manifest: present (complete)
+  Standard skills: present (complete)
+  MCP configuration: present (complete)
+✓ QUALIFIED PASS - 20 rules passed.
+PASS is qualified: static conformance checks do not certify runtime or complete client behavior.
 ```
 
-**Release status:** v0.1.1 is published to npm.
+**Release status:** v0.1.1 is published to npm. v0.2.0 is an unreleased release
+candidate in this checkout and has not been published, tagged, or released.
 Only Agent Plugins 1.0.0 is supported; passing the implemented checks is not
 certification of complete package or executing-client conformance.
 
@@ -55,7 +62,8 @@ tarball under `.artifacts/`.
 ```sh
 aiconform ./my-plugin
 aiconform ./my-plugin --format terminal
-aiconform ./my-plugin --format json > aiconform-report.json
+aiconform ./my-plugin --json > aiconform-report-v1.json
+aiconform ./my-plugin --json --report-version 2 > aiconform-report-v2.json
 aiconform ./my-plugin --rule AP006
 aiconform --list-rules
 aiconform --list-rules --format json
@@ -78,17 +86,29 @@ traversal. Failed prerequisites are reported separately; they never produce a
 false pass for the requested rule. `--list-rules` does not inspect files and
 cannot be combined with a directory or `--rule`.
 
+Enhanced terminal output says `LIMITED PASS` when one selected rule passes and
+reports the other 19 rules as excluded. It never presents that result as an
+unqualified full pass.
+
 | Exit code | Meaning |
 | --- | --- |
-| 0 | Evaluated checks passed, or help/version/listing succeeded |
+| 0 | Selected rules passed or were legitimately not applicable, or help/version/listing succeeded |
 | 1 | At least one selected conformance check failed |
-| 2 | Usage/internal error or incomplete check, including unavailable client context |
+| 2 | Usage/internal error or a selected rule was unable to complete |
 
-Full runs allow absent optional components and show their rules as skipped.
-A selected rule with no applicable input exits 2. A fatal manifest prevents
-component checks, while isolated skill/server failures leave independent
-components checkable. Unknown manifest fields and a non-object extensions
-container fail package checks without stopping otherwise valid components.
+JSON v1 deliberately retains its legacy mixed-outcome precedence: a report with
+both a conformance failure and incomplete inspection is `FAIL`/exit 1. Enhanced
+terminal output and JSON v2 give `unable_to_complete` precedence and exit 2.
+This v0.2.x compatibility exception will be unified when JSON v2 becomes the
+default in a future major release.
+
+Full runs allow absent optional components and show their rules as not applicable.
+For a selected rule with no applicable input, enhanced terminal and JSON v2
+return a limited result with exit 0; JSON v1 retains its legacy `INCOMPLETE` and
+exit 2 behavior. A fatal manifest prevents component checks, while isolated
+skill/server failures leave independent components checkable. Unknown manifest
+fields and a non-object extensions container fail package checks without stopping
+otherwise valid components.
 
 Counts refer to distinct rules, not the number of servers or files. The minimal
 fixture reports 10 passed and 10 skipped instead of claiming 20 checks ran.
@@ -103,10 +123,14 @@ plugin; independent component checks continue. See specification §8.1.
 
 ## JSON and CI
 
-JSON output has a versioned, documented contract with structured findings,
-rule metadata, specification URLs, prerequisite failures, and skip reasons.
+`--json` and `--format json` both emit the unchanged JSON v1 contract by default.
+JSON v2 is opt-in only with `--json --report-version 2`; using report version 2
+without `--json` is invalid usage. V2 reports every AP001-AP020 outcome and adds
+structured inspection, package components, extension namespaces, MCP server
+declarations, execution problems, scope limits, and final determination.
 See [JSON output documentation](docs/json-output.md) and the
-[JSON Schema](schemas/report.schema.json). Use the CLI directly when redirecting
+[v1 JSON Schema](schemas/report.schema.json) or
+[v2 JSON Schema](schemas/report-v2.schema.json). Use the CLI directly when redirecting
 JSON; `npm start` can add npm's own script banners.
 
 For CI after publication, add the pinned package as a devDependency:
