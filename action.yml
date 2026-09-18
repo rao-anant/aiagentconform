@@ -1,0 +1,94 @@
+name: AIAgentConform
+description: Validate an Agent Plugins package and publish a structured JSON v2 report.
+author: Anant Rao
+
+inputs:
+  path:
+    description: Package path relative to github.workspace.
+    required: false
+    default: .
+  rule:
+    description: Optional single AP001-AP020 rule ID.
+    required: false
+    default: ''
+  upload-report:
+    description: Upload the JSON v2 report as a workflow artifact.
+    required: false
+    default: 'true'
+  artifact-name:
+    description: Name of the uploaded JSON report artifact.
+    required: false
+    default: aiagentconform-report
+
+outputs:
+  determination:
+    description: JSON v2 determination, or empty when Action tooling failed.
+    value: ${{ steps.finalize.outputs.determination }}
+  passed:
+    description: Number of passed rules.
+    value: ${{ steps.finalize.outputs.passed }}
+  failed:
+    description: Number of failed rules.
+    value: ${{ steps.finalize.outputs.failed }}
+  not_applicable:
+    description: Number of not-applicable rules.
+    value: ${{ steps.finalize.outputs.not_applicable }}
+  excluded:
+    description: Number of excluded rules.
+    value: ${{ steps.finalize.outputs.excluded }}
+  unable_to_complete:
+    description: Number of rules unable to complete.
+    value: ${{ steps.finalize.outputs.unable_to_complete }}
+  selected:
+    description: Number of selected rules.
+    value: ${{ steps.finalize.outputs.selected }}
+  exit_code:
+    description: Validated CLI exit code, or empty when Action tooling failed.
+    value: ${{ steps.finalize.outputs.exit_code }}
+  report_path:
+    description: Absolute path to the JSON v2 report, or empty when unavailable.
+    value: ${{ steps.finalize.outputs.report_path }}
+  artifact_name:
+    description: Configured artifact name, or empty when Action tooling failed.
+    value: ${{ steps.finalize.outputs.artifact_name }}
+
+runs:
+  using: composite
+  steps:
+    - name: Set up Node.js
+      uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+      with:
+        node-version: 22.12.0
+
+    - name: Run AIAgentConform
+      id: runner
+      shell: bash
+      env:
+        AICONFORM_INPUT_PATH: ${{ inputs.path }}
+        AICONFORM_INPUT_RULE: ${{ inputs.rule }}
+        AICONFORM_INPUT_UPLOAD_REPORT: ${{ inputs.upload-report }}
+        AICONFORM_INPUT_ARTIFACT_NAME: ${{ inputs.artifact-name }}
+      run: node "${GITHUB_ACTION_PATH}/action/runner.cjs"
+
+    - name: Upload AIAgentConform JSON v2 report
+      id: upload
+      if: ${{ steps.runner.outputs.report_available == 'true' && steps.runner.outputs.upload_report == 'true' }}
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+      with:
+        name: ${{ steps.runner.outputs.artifact_name }}
+        path: ${{ steps.runner.outputs.report_path }}
+        if-no-files-found: error
+
+    - name: Finalize AIAgentConform result
+      id: finalize
+      if: ${{ always() }}
+      shell: bash
+      env:
+        AICONFORM_STATE_PATH: ${{ steps.runner.outputs.state_path }}
+        AICONFORM_RUNNER_OUTCOME: ${{ steps.runner.outcome }}
+        AICONFORM_UPLOAD_OUTCOME: ${{ steps.upload.outcome }}
+      run: node "${GITHUB_ACTION_PATH}/action/finalizer.cjs"
+
+branding:
+  icon: check-circle
+  color: blue

@@ -1,7 +1,4 @@
-# Copy to .github/workflows/aiconform.yml in a plugin repository.
-# Prerequisite: install a reviewed local AIAgentConform tarball as a devDependency
-# and commit package.json, package-lock.json, and that tarball to your repository.
-# After public release, a pinned registry devDependency can replace the tarball.
+# Copy to .github/workflows/aiconform.yml after the v0.3.0 release is complete.
 name: AIAgentConform conformance
 on:
   pull_request:
@@ -13,13 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - uses: actions/setup-node@v6
+      # v0.3.0 is promised never to move. A reviewed full commit SHA is the
+      # strongest security pin because Git tags are technically mutable.
+      - uses: rao-anant/aiagentconform@v0.3.0
         with:
-          node-version: '22'
-          cache: npm
-      - run: npm ci --ignore-scripts
-      # Change ./plugin to the directory containing your root plugin.json.
-      # npx cannot download another package because --no-install is set.
-      # AIAgentConform exits 1 for non-conformance and 2 for incomplete checks/errors;
-      # either result fails this step and the job. Do not use continue-on-error.
-      - run: npx --no-install aiconform ./plugin
+          path: ./plugin

@@ -8,13 +8,14 @@
 - Official schema vendoring, specification references, and scope documentation
 - Valid/invalid fixtures and per-rule tests
 - Independent manifest, component, skill, and server failure boundaries
+- Fixed-version composite GitHub Action with JSON v2 artifacts and job summaries
 
 ## Next
 
 - Track specification revisions and clarify documented ambiguities upstream
 - Extend static coverage with explicitly justified normative checks
 - Add advisory lint rules separately from strict conformance
-- Add CI integrations, configuration, and report format compatibility tests
+- Extend CI integration coverage and configuration options without weakening the fixed report contract
 - Expand operating-system coverage for path and symlink behavior
 
 ## Later / outside the current implementation

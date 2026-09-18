@@ -28,3 +28,8 @@ components and the opaque `com.github.awesome-copilot` extension namespace.
 `agent-plugins/acceptance/context7` exercises a declared remote HTTP MCP server,
 including stdio-only not-applicable outcomes. The endpoint is recorded but is
 never contacted.
+
+`action/` contains dedicated local-package GitHub Action integration fixtures
+for full pass, conformance failure, unable-to-complete, mixed failure/incomplete,
+single-rule limited pass, and a package below a workspace subdirectory. Fixture
+commands and servers are never executed or contacted.

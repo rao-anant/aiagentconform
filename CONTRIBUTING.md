@@ -20,6 +20,11 @@ It leaves the reviewed tarball under `.artifacts/` and removes its temporary
 installation. It never publishes or runs plugin code. Use `npm test` or
 `npm run test:watch` for faster feedback while editing.
 
+Run `npm run verify:action` on Ubuntu to build and pack the local npm package,
+then exercise the composite Action runner/finalizer against all Action fixtures.
+Hosted Action integration is intentionally Ubuntu-only; the existing CLI matrix
+continues to cover Ubuntu and macOS with Node 22.12 and 24.
+
 ## Contribute a conformance rule
 
 1. Read the current official normative specification and the relevant conformance
@@ -64,9 +69,10 @@ requirement, and validation performed. Explain any interpretation decisions or
 unimplemented cases. Keep each pull request focused. Screenshots are optional;
 fixture inputs and expected findings are more useful for reviewing rules.
 
-The GitHub workflow defines Linux/macOS checks on the minimum supported Node
-version and Node 24. A local run does not establish that the hosted matrix passed.
-Windows filesystem behavior remains experimental until verified on Windows.
+The GitHub workflow defines Linux/macOS CLI checks on the minimum supported Node
+version and Node 24, plus a separate Ubuntu Action integration job. A local run
+does not establish that the hosted jobs passed. Windows filesystem behavior
+remains experimental until verified on Windows.
 
 ## Licensing
 

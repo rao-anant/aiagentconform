@@ -24,10 +24,29 @@ Components:
 PASS is qualified: static conformance checks do not certify runtime or complete client behavior.
 ```
 
-**Release status:** v0.1.1 is published to npm. v0.2.0 is an unreleased release
-candidate in this checkout and has not been published, tagged, or released.
+**Release status:** v0.3.0 is an unreleased release candidate in this checkout.
 Only Agent Plugins 1.0.0 is supported; passing the implemented checks is not
 certification of complete package or executing-client conformance.
+
+## GitHub Action
+
+After the v0.3.0 release procedure is complete, add the fixed-version Action to
+an Ubuntu workflow:
+
+```yaml
+- uses: actions/checkout@v6
+- id: aiconform
+  uses: rao-anant/aiagentconform@v0.3.0
+  with:
+    path: ./plugin
+```
+
+The Action uses JSON v2 internally and uploads it as `aiagentconform-report` by
+default. `v0.3.0` is a fixed tag this project promises never to move, but Git
+tags are technically mutable; a reviewed full commit SHA is the strongest
+security pin. The project does not publish a moving `v0` tag. See the
+[GitHub Action guide](docs/github-action.md) for inputs, outputs, failure
+behavior, path security, artifact control, and single-rule examples.
 
 ## Install and try it now
 
@@ -99,8 +118,8 @@ unqualified full pass.
 JSON v1 deliberately retains its legacy mixed-outcome precedence: a report with
 both a conformance failure and incomplete inspection is `FAIL`/exit 1. Enhanced
 terminal output and JSON v2 give `unable_to_complete` precedence and exit 2.
-This v0.2.x compatibility exception will be unified when JSON v2 becomes the
-default in a future major release.
+This compatibility exception remains in v0.3.0 and will be unified when JSON v2
+becomes the default in a future major release.
 
 Full runs allow absent optional components and show their rules as not applicable.
 For a selected rule with no applicable input, enhanced terminal and JSON v2
@@ -121,7 +140,7 @@ must ignore namespaces it does not implement without validating their contents.
 An AP009 package failure therefore does not mean a client should reject the
 plugin; independent component checks continue. See specification §8.1.
 
-## JSON and CI
+## JSON and CLI-based CI
 
 `--json` and `--format json` both emit the unchanged JSON v1 contract by default.
 JSON v2 is opt-in only with `--json --report-version 2`; using report version 2
@@ -140,10 +159,9 @@ npm install --save-dev aiagentconform@0.1.1
 npx --no-install aiconform ./plugin
 ```
 
-Copy [examples/aiconform.yml](examples/aiconform.yml) to
-`.github/workflows/aiconform.yml` and adjust `./plugin`. Its check step propagates
-both failure and incomplete exit codes to GitHub Actions; it does not hide errors
-with `continue-on-error`.
+For the composite Action workflow, copy
+[examples/aiconform.yml](examples/aiconform.yml) and adjust `./plugin`. The
+Action uploads JSON v2 before propagating failure and incomplete exit codes.
 
 ## Supported rules
 

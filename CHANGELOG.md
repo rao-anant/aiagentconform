@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.3.0 — Unreleased
+
+### Added
+
+- Root composite GitHub Action coupled to `aiagentconform@0.3.0`, using JSON v2
+  internally and uploading the report artifact by default before propagating
+  validated conformance exits.
+- Built-in-only Action runner/finalizer helpers, workspace path and symlink
+  boundary enforcement, job summaries, outputs, tooling-error isolation, and
+  Ubuntu local-package integration coverage.
+- Fixed-tag and full-commit-SHA security guidance. No moving `v0` tag is created
+  or documented.
+
+### Compatibility
+
+- AP001-AP020 validation semantics, JSON v1, JSON v2, and CLI behavior are
+  unchanged. The Action does not expose report-version selection.
+- The npm package excludes the repository-only `action.yml` and `action/`
+  implementation while retaining both report schemas and upstream notices.
+
 ## 0.2.0 — Unreleased
 
 No npm package, tag, GitHub release, or hosted artifact has been created for

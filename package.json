@@ -1,6 +1,6 @@
 {
   "name": "aiagentconform",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Open-source conformance testing for AI agent protocols and standards.",
   "license": "MIT",
   "author": "Anant Rao",
@@ -40,6 +40,7 @@
     "prepack": "npm run build",
     "check": "npm test && npm run typecheck && npm run build",
     "verify:package": "node scripts/verify-package.mjs",
+    "verify:action": "npm run build && npm run verify:package && node scripts/verify-action.mjs",
     "verify": "npm run check && npm run verify:package",
     "prepublishOnly": "npm run verify"
   },

@@ -28,6 +28,7 @@ for (const file of [
   'CONTRIBUTING.md',
 ]) assert(files.has(file), `Missing package file: ${file}`);
 assert(![...files].some(file => /^(tests|fixtures|node_modules|scripts|\.github)\//.test(file)), 'Development-only files leaked into package');
+assert(!files.has('action.yml') && ![...files].some(file => /^action\//.test(file)), 'Repository Action files leaked into the npm package');
 const artifact = path.join(artifacts, packed.filename);
 const install = mkdtempSync(path.join(tmpdir(), 'aiconform-package-'));
 try {

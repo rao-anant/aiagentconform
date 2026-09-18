@@ -1,8 +1,8 @@
 # JSON output contracts
 
-JSON version 1 remains the default contract throughout v0.2.x. `--json` is the
+JSON version 1 remains the default CLI contract in v0.3.0. `--json` is the
 documented shorthand for `--format json`; both produce the same v1 bytes for the
-same input.
+same input. The v0.3.0 GitHub Action deliberately uses JSON v2 internally.
 
 Use `aiconform <directory> --format json` or
 `aiconform --list-rules --format json`. The CLI writes exactly one JSON object
@@ -168,5 +168,5 @@ Outcome summary counts total 20. `determination` is `pass`, `limited_pass`,
 For compatibility, JSON v1 retains failure-first status and exit 1 when a report
 contains both a conformance failure and incomplete inspection. Terminal and JSON
 v2 instead give `unable_to_complete` precedence and exit 2. This deliberate
-v0.2.x exception will be unified when JSON v2 becomes the default in a future
-major release.
+compatibility exception remains in v0.3.0 and will be unified when JSON v2
+becomes the default in a future major release.
