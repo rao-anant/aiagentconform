@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it } from 'vitest';
-import { mkdtempSync, readFileSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
+import { mkdtempSync, readFileSync, realpathSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { createRequire } from 'node:module';
@@ -75,7 +75,7 @@ describe('composite Action contract', () => {
 describe('Action path boundary', () => {
   it('allows missing paths whose resolved location remains in the workspace', () => {
     const workspace = temp('aiconform-action-workspace-');
-    expect(runner.resolveInputPath(workspace, 'missing/package')).toBe(path.join(workspace, 'missing/package'));
+    expect(runner.resolveInputPath(workspace, 'missing/package')).toBe(path.join(realpathSync(workspace), 'missing/package'));
   });
 
   it.each(['/tmp/package', 'C:\\outside\\package', '\\\\server\\share', '../package', 'nested/../package', 'nested\\..\\package'])('rejects unsafe input %s', input => {
@@ -94,10 +94,9 @@ describe('Action path boundary', () => {
   it('allows an in-workspace symbolic link and missing trailing path', () => {
     const workspace = temp('aiconform-action-workspace-');
     const target = path.join(workspace, 'target');
-    const nested = path.join(target, 'not-created');
     require('node:fs').mkdirSync(target);
     symlinkSync(target, path.join(workspace, 'inside'), 'dir');
-    expect(runner.resolveInputPath(workspace, 'inside/not-created')).toBe(nested);
+    expect(runner.resolveInputPath(workspace, 'inside/not-created')).toBe(path.join(realpathSync(target), 'not-created'));
   });
 });
 
